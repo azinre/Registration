@@ -1,0 +1,67 @@
+﻿@page
+@model Lab4.Pages.StudentManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="Index" asp-route-sorting="name">@Html.DisplayNameFor(model => model.Student[0].Name)</a>
+            </th>
+            <th>
+                <a asp-page="Index" asp-route-sorting="numberOfCourses">Number Of Courses</a>
+            </th>
+            <th>
+                <a asp-page="Index" asp-route-sorting="avgGrade">Grade Avgerage</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Student)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>@item.AcademicRecords.Count()</td>
+                <td>
+                    @{
+                        var grade = item.AcademicRecords.Select(idx => idx.Grade).Average();
+                    }
+                    @(grade != null ? grade : 0)
+                </td>
+                <td>
+                <td>
+                    <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                    <a href="javascript:void(0)" onclick="DeleteBox(`@item.Id`,`@item.Name`)">Delete</a>
+                       
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<form method="post" id="formToSubmit">
+    <input type="hidden" name="stdId" id="stdIdPlaceholder" />
+</form>
+@section Scripts{
+    <script type="text/javascript">
+        function DeleteBox(studentId, name) {
+            let result = confirm("Please confirm to delete student:\n " + name + " \n All his/her academic records will be deleted too!");
+            if (result) {     
+                document.getElementById("stdIdPlaceholder").value = studentId;
+                document.getElementById("formToSubmit").submit(); 
+            }
+        }
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@page
+@model Lab4.Pages.AcademicRecordManagement.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th><a asp-page="./Index" asp-route-sorting="course">Course</a></th>
+            <th><a asp-page="./Index" asp-route-sorting="student">Student</a></th>
+            <th><a asp-page="./Index" asp-route-sorting="grade">Grade</a></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.AcademicRecord) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GetCompleteCourse)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Student.GetStudentIdName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grade)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-studentId="@item.StudentId" asp-route-courseCode="@item.CourseCode">Edit</a> |
+                    @* <a asp-page="./Edit" asp-route-id="@item.StudentId" asp-route-course="@item.CourseCode">Edit</a> | *@
+                    <a asp-page="./Index" asp-route-delete="@item.StudentId" asp-route-course="@item.CourseCode" onclick="return confirm('Please confirm to delete the following academic record \n\n Student: @item.Student.Name \n Course: @item.CourseCodeNavigation.Title')">Delete</a>
+                </td>
+            </tr>
+    }
+    </tbody>
+</table>
+@* <form method="post" id="formToSubmit">
+    <input type="hidden" name="stdId" id="stdIdPlaceholder" />
+    <input type="hidden" name="cc" id="CCPlaceholder" />
+</form>
+@section Scripts{
+    <script type="text/javascript">
+        function DeleteBox(studentId, cc, name, courseName) {
+            let result = confirm("Please confirm to delete the following Academic record:\nStudent Name: " + name + " \nCourse Name: " + courseName);
+            if (result) {               
+                document.getElementById("stdIdPlaceholder").value = studentId;
+                document.getElementById("CCPlaceholder").value = cc;
+                document.getElementById("formToSubmit").submit(); 
+            }
+        }
+    </script>
+} *@
